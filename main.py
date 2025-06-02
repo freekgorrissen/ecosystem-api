@@ -19,10 +19,11 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",  # Vite dev server
         "http://localhost:3000",  # Alternative dev server
-        "https://freekgorrissen.github.io"  # Production client
+        "https://freekgorrissen.github.io",  # Production client
+        "https://ecosystem-api-467552063750.europe-west1.run.app"  # Cloud Run client
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
     max_age=3600  # Cache preflight requests for 1 hour
