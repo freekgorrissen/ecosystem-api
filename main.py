@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 
+from auth import require_allowed_user
 from commute import CommuteResponse, Direction, plan_person
 from people_config import load_people_config
 
@@ -26,14 +27,16 @@ app.add_middleware(
     max_age=3600  # Cache preflight requests for 1 hour
 )
 
-# The NS and Google Maps clients read their keys from the environment; check them at startup
-if not os.getenv("GOOGLE_MAPS_API_KEY") or not os.getenv("NS_API_KEY"):
-    raise ValueError("Missing required API keys in environment variables")
+# The NS/Google Maps clients and the sign-in check read these at request time; check them at startup
+REQUIRED_SETTINGS = ["GOOGLE_MAPS_API_KEY", "NS_API_KEY", "GOOGLE_CLIENT_ID", "ALLOWED_EMAILS"]
+missing_settings = [name for name in REQUIRED_SETTINGS if not os.getenv(name)]
+if missing_settings:
+    raise ValueError(f"Missing required environment variables: {', '.join(missing_settings)}")
 
 PEOPLE = load_people_config(os.getenv("PEOPLE_CONFIG", "people.json")).people
 
 
-@app.get("/api/commute/{person_id}")
+@app.get("/api/commute/{person_id}", dependencies=[Depends(require_allowed_user)])
 def get_commute(person_id: str, direction: Direction) -> CommuteResponse:
     """Plan every commute option for one person, leaving now"""
     person = PEOPLE.get(person_id)

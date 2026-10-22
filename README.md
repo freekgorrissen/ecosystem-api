@@ -9,6 +9,8 @@ This is the backend API service for the Ecosystem application. It plans expected
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 NS_API_KEY=your_ns_api_key
 PEOPLE_CONFIG=people.json
+GOOGLE_CLIENT_ID=the_client_apps_google_oauth_client_id
+ALLOWED_EMAILS=you@example.com,partner@example.com
 ```
 
 2. Create `people.json` with each person's commute options (see `people.example.json`). It contains real addresses, so it's gitignored and kept out of the Docker image.
@@ -28,6 +30,8 @@ uvicorn main:app --reload
 - `GET /api/commute/{person}?direction=to_work|to_home` - Plan every commute option for a person, leaving now: total time, departure and arrival per leg, and train disruptions
 
 Train legs come from the NS API; car, bike, walking and bus legs from Google Maps.
+
+Requests need a Google access token from the client app: `Authorization: Bearer <token>`. Only accounts in `ALLOWED_EMAILS` are let in. To try the API in `/docs`, click **Authorize** and paste a token (in the client app it's in the browser's localStorage as `accessToken`).
 
 ## Deployment to Google Cloud Run
 
@@ -54,3 +58,5 @@ Make sure to set the environment variables in Google Cloud Run:
 - `GOOGLE_MAPS_API_KEY`
 - `NS_API_KEY`
 - `PEOPLE_CONFIG` (path of the mounted `people.json`)
+- `GOOGLE_CLIENT_ID`
+- `ALLOWED_EMAILS`
