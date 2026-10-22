@@ -1,34 +1,33 @@
 # Ecosystem API
 
-This is the backend API service for the Ecosystem application, providing endpoints for train and maps data.
+This is the backend API service for the Ecosystem application. It plans expected commute times by car and public transport, comparing several commute options per person.
 
 ## Setup
 
-1. Create a `.env` file in the root directory with the following variables:
+1. Create a `.env` file in the root directory (see `.env.example`):
 ```
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 NS_API_KEY=your_ns_api_key
+PEOPLE_CONFIG=people.json
 ```
 
-2. Install dependencies:
+2. Create `people.json` with each person's commute options (see `people.example.json`). It contains real addresses, so it's gitignored and kept out of the Docker image.
+
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the development server:
+4. Run the development server:
 ```bash
 uvicorn main:app --reload
 ```
 
 ## API Endpoints
 
-### Train Data
-- `GET /api/train/stations` - Get all train stations
-- `GET /api/train/departures/{station_code}` - Get departures for a specific station
+- `GET /api/commute/{person}?direction=to_work|to_home` - Plan every commute option for a person, leaving now: total time, departure and arrival per leg, and train disruptions
 
-### Maps Data
-- `GET /api/maps/geocode?address={address}` - Geocode an address
-- `GET /api/maps/directions?origin={origin}&destination={destination}&mode={mode}` - Get directions
+Train legs come from the NS API; car, bike, walking and bus legs from Google Maps.
 
 ## Deployment to Google Cloud Run
 
@@ -53,4 +52,5 @@ gcloud run deploy ecosystem-api \
 
 Make sure to set the environment variables in Google Cloud Run:
 - `GOOGLE_MAPS_API_KEY`
-- `NS_API_KEY` 
+- `NS_API_KEY`
+- `PEOPLE_CONFIG` (path of the mounted `people.json`)

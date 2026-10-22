@@ -53,4 +53,8 @@ htmlcov/
 .hypothesis/
 .coverage.*
 coverage.xml
-*.cover 
+*.cover
+PLAN.md
+
+# Personal data
+people.json
