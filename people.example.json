@@ -1,0 +1,40 @@
+{
+    "people": {
+        "freek": {
+            "name": "",
+            "commutes": [
+                {
+                    "id": "car",
+                    "name": "Car",
+                    "legs": [
+                        { "mode": "car", "from": "", "to": "" }
+                    ]
+                },
+                {
+                    "id": "car_train_bus",
+                    "name": "Car + train + bus",
+                    "legs": [
+                        { "mode": "car", "from": "", "to": "", "transfer_minutes": 7 },
+                        { "mode": "train", "from": "", "to": "", "transfer_minutes": 5 },
+                        { "mode": "bus", "from": "", "to": "", "transfer_minutes": 0 },
+                        { "mode": "walk", "from": "", "to": "" }
+                    ]
+                }
+            ]
+        },
+        "domi": {
+            "name": "",
+            "commutes": [
+                {
+                    "id": "car_train",
+                    "name": "Car + train",
+                    "legs": [
+                        { "mode": "car", "from": "", "to": "", "transfer_minutes": 7 },
+                        { "mode": "train", "from": "", "to": "", "transfer_minutes": 2 },
+                        { "mode": "bike", "from": "", "to": "" }
+                    ]
+                }
+            ]
+        }
+    }
+}
